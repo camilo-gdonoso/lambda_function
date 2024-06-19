@@ -41,27 +41,23 @@ pipeline {
             }
         }
 
-        stage('Plan Terraform') {
+        stage('Plan Terraform Plan') {
             steps {
-                sh '''
-                    terraform plan \
+                sh 'terraform plan \
                     -var "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                     -var "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                    -var "key_name=${params.key_name}" \
-                    -var "private_key_path=${params.private_key_path}"
-                '''
+                    -var "key_name=key_pair" \
+                    -var "private_key_path=key_pair.pem"'
             }
         }
 
         stage('Apply Terraform') {
             steps {
-                sh '''
-                    terraform apply -auto-approve \
+                sh  'terraform apply -auto-approve \
                     -var "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                     -var "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                    -var "key_name=${params.key_name}" \
-                    -var "private_key_path=${params.private_key_path}"
-                '''
+                    -var "key_name=key_pair" \
+                    -var "private_key_path=key_pair.pem"'
             }
         }
     }

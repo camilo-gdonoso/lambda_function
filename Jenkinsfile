@@ -7,34 +7,61 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Source Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/tu-usuario/tu-repo.git'
+                git branch: 'master', url: 'https://github.com/camilo-gdonoso/lambda_function.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Prepare Environment') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                '''
             }
         }
 
-        stage('Package Lambda') {
+        stage('Package Lambda Function') {
             steps {
-                sh './package.sh'
+                sh 'zip lambda_function.zip lambda_function.py'
             }
         }
 
-        stage('Deploy to AWS Lambda') {
+        stage('Initialize Terraform') {
             steps {
-                withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'),
-                                 string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh '''
-                        aws lambda update-function-code \
-                            --function-name tu-funcion-lambda \
-                            --zip-file fileb://lambda_function.zip
-                    '''
-                }
+                sh 'terraform init'
+            }
+        }
+
+        stage('Format and Validate Terraform Code') {
+            steps {
+                sh 'terraform fmt && terraform validate'
+            }
+        }
+
+        stage('Plan Terraform') {
+            steps {
+                sh '''
+                    terraform plan \
+                    -var "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                    -var "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                    -var "key_name=${params.key_name}" \
+                    -var "private_key_path=${params.private_key_path}"
+                '''
+            }
+        }
+
+        stage('Apply Terraform') {
+            steps {
+                sh '''
+                    terraform apply -auto-approve \
+                    -var "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                    -var "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                    -var "key_name=${params.key_name}" \
+                    -var "private_key_path=${params.private_key_path}"
+                '''
             }
         }
     }

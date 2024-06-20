@@ -2,7 +2,8 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_iam_role" "lambda_execution_role" {
+/*resource "aws_iam_role" "lambda_execution_role" {
+  
   name = "lambda_execution_role"
 
   assume_role_policy = jsonencode({
@@ -23,10 +24,10 @@ resource "aws_iam_role" "lambda_execution_role" {
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
   ]
 }
-
+*/
 resource "aws_lambda_function" "lambda_function" {
   function_name = "my-lambda-function"
-  role          = aws_iam_role.lambda_execution_role.arn
+  role = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.8"
 

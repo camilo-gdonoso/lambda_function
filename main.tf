@@ -26,7 +26,7 @@ provider "aws" {
 }
 */
 resource "aws_lambda_function" "lambda_function" {
-  function_name = "my-lambda-function"
+  function_name = "mi-nueva-funcion"
   role          = "arn:aws:iam::489568735630:role/lambda_execution_role"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.8"

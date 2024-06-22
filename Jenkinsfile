@@ -39,14 +39,18 @@ pipeline {
         }
         stage('Create AWS Lambda Function') {
             steps {
-                withAWS(credentials: 'ID_AKID_SECRET') {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'ID_AKID_SECRET', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            sh """
+            export AWS_ACCESS_KEY_ID=\$AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=\$AWS_SECRET_ACCESS_KEY
                 sh 'aws lambda create-function \
                     --function-name $LAMBDA_NAME \
                     --zip-file fileb://lambda_function.zip \
                     --handler $HANDLER \
                     --runtime $RUNTIME \
                     --role $ROLE_ARN \
-                    --region $REGION'
+                    --region $REGION
+                """
                 }
             }
         }	

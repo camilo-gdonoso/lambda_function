@@ -48,13 +48,14 @@ pipeline {
                     --role $ROLE_ARN \
                     --region $REGION'
                 }
-        }
+            }
+        }	
         stage('Clean Up') {
             steps {
                 sh "rm -rf ${ZIP_FILE}"
             }
         }
         
+        }
     }
-    }
-}
+

@@ -39,7 +39,6 @@ pipeline {
         }
         stage('Create AWS Lambda Function') {
             steps {
-                withAWS(credentials: "${env.AWS_CREDENTIALS_ID}") {
                 sh 'aws lambda create-function \
                     --function-name $LAMBDA_NAME \
                     --zip-file fileb://$ZIP_FILE \
@@ -47,7 +46,7 @@ pipeline {
                     --runtime $RUNTIME \
                     --role $ROLE_ARN \
                     --region $REGION'
-                }
+                
             }
         }	
         stage('Clean Up') {

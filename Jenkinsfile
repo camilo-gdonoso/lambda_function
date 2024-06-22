@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Create AWS Lambda Function') {
             steps {
-                withAWS(credentials: AWS_CREDENTIALS_ID) {
+                withAWS(credentials: $AWS_CREDENTIALS_ID) {
                 sh 'aws lambda create-function \
                     --function-name $LAMBDA_NAME \
                     --zip-file fileb://lambda_function.zip \

@@ -54,11 +54,6 @@ pipeline {
                 }
             }
         }	
-        stage('Clean Up') {
-            steps {
-                sh "rm -rf ${ZIP_FILE}"
-            }
-        }
         
         }
     }

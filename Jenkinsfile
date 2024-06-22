@@ -7,7 +7,7 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1'
         LAMBDA_NAME = 'new_func_debian'
         PYTHON_FILE = 'my_new_lambda.py'
-        ZIP_FILE = 'my_new_lambda.zip'
+        //ZIP_FILE = 'my_new_lambda.zip'
         HANDLER = 'my_new_lambda.lambda_handler'
         RUNTIME = 'python3.8'
         ROLE_ARN = 'arn:aws:iam::489568735630:role/lambda_execution_role'
@@ -41,7 +41,7 @@ pipeline {
             steps {
                 sh 'aws lambda create-function \
                     --function-name $LAMBDA_NAME \
-                    --zip-file fileb://$ZIP_FILE \
+                    --zip-file fileb://lambda_function.zip \
                     --handler $HANDLER \
                     --runtime $RUNTIME \
                     --role $ROLE_ARN \

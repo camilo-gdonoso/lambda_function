@@ -10,7 +10,7 @@ pipeline {
         //ZIP_FILE = 'my_new_lambda.zip'
         HANDLER = 'my_new_lambda.lambda_handler'
         RUNTIME = 'python3.8'
-        ROLE_ARN = 'arn:aws:iam::489568735630:role/lambda_execution_role'
+        ROLE_ARN = 'arn:aws:iam::767397712182:role/lambda_execution_role'
         REGION = 'us-east-1' // Cambia esto a tu región preferida
         AWS_CREDENTIALS_ID = 'ID_AKID_SECRET' // ID de las credenciales de AWS en Jenkins
     }

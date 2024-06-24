@@ -5,7 +5,7 @@ pipeline {
         //AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         //AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         AWS_DEFAULT_REGION = 'us-east-1'
-        LAMBDA_NAME = 'new_func_debian'
+        LAMBDA_NAME = 'new_func_aws'
         PYTHON_FILE = 'my_new_lambda.py'
         //ZIP_FILE = 'my_new_lambda.zip'
         HANDLER = 'my_new_lambda.lambda_handler'
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Create lambda Zip') {
             steps {
-                sh 'zip lambda_function.zip lambda_function.py'
+                sh 'zip my_new_lambda.zip my_new_lambda.py'
             }
         }
         stage('Create AWS Lambda Function') {
@@ -45,7 +45,7 @@ pipeline {
                 export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
                 aws lambda create-function \
                     --function-name $LAMBDA_NAME \
-                    --zip-file fileb://lambda_function.zip \
+                    --zip-file fileb://my_new_lambda.zip \
                     --handler $HANDLER \
                     --runtime $RUNTIME \
                     --role $ROLE_ARN \
